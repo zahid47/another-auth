@@ -11,14 +11,15 @@ const protect = (req, res, next) => {
 
   verifyAccessToken(token)
     .then((payload, err) => {
-      if (err) return res.status(401).json({ error: "unauthorized" });
+      if (err)
+        return res.status(401).json({ error: "unauthorized, bad token" });
 
       User.findById(payload.aud)
         .then((user) => {
           req.user = user;
           next();
         })
-        .catch((err) => res.status(500).json({ err }));
+        .catch((err) => res.status(500).json(err));
     })
     .catch((_) => {
       return res.status(401).json({ error: "expired or bad token" });

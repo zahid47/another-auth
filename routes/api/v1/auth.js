@@ -3,9 +3,8 @@ import {
   testRoute,
   registerUser,
   loginUser,
-  updatePass,
 } from "../../../controllers/authController.js";
-import protect from "../../../middlewares/authMiddleware.js";
+import protect from "../../../middlewares/protect.js";
 
 const router = Router();
 
@@ -28,13 +27,6 @@ router.post("/register", (req, res) => {
 // @access public
 router.post("/login", (req, res) => {
   loginUser(req, res);
-});
-
-// @route  POST api/v1/auth/updatepass
-// @desc   update password
-// @access private
-router.put("/updatepass", protect, (req, res) => {
-  updatePass(req, res);
 });
 
 export default router;

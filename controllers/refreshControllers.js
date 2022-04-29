@@ -5,6 +5,9 @@ import {
 } from "../helpers/jwtHelper.js";
 
 export const refreshAccessToken = (req, res) => {
+  if (!req.cookies.refreshToken)
+    return res.status(401).json({ refreshToken: "no refresh token provided" });
+
   verifyRefreshToken(req.cookies.refreshToken)
     .then((payload, err) => {
       if (err)

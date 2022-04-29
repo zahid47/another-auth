@@ -1,2 +1,2 @@
 # another-auth
-jwt auth with access and refresh token
+JWT auth with access and refresh token

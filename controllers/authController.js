@@ -30,12 +30,12 @@ export const registerUser = (req, res) => {
             newUser
               .save()
               .then((_) => res.status(201).json({ success: true }))
-              .catch((err) => res.status(500).json({ err }));
+              .catch((err) => res.status(500).json(err));
           });
         });
       }
     })
-    .catch((err) => res.status(500).json({ err }));
+    .catch((err) => res.status(500).json(err));
 };
 
 export const loginUser = (req, res) => {
@@ -75,43 +75,5 @@ export const loginUser = (req, res) => {
         })
         .catch((err) => console.log(err));
     })
-    .catch((err) => res.status(500).json({ err }));
-};
-
-export const updatePass = (req, res) => {
-  if (!req.body.currentPass) {
-    return res.status(400).json({ error: "no current password provided" });
-  }
-  if (!req.body.newPass) {
-    return res.status(400).json({ error: "no new password provided" });
-  }
-  if (req.body.currentPass === req.body.newPass) {
-    return res
-      .status(400)
-      .json({ error: "new password can't be same as current password" });
-  }
-
-  //check if current pass matches
-  bcrypt
-    .compare(req.body.currentPass, req.user.password)
-    .then((matched) => {
-      if (!matched) return res.status(401).json({ password: "wrong password" });
-
-      //update pass now
-      const updatedPass = {};
-
-      //hash the pass
-      bcrypt.genSalt((err, salt) => {
-        if (err) return res.send(err);
-        bcrypt.hash(req.body.newPass, salt, (err, hashedPassword) => {
-          if (err) return res.send(err);
-          updatedPass.password = hashedPassword;
-          //save the new pass in DB
-          User.findByIdAndUpdate(req.user.id, updatedPass)
-            .then((user) => res.status(200).json(user))
-            .catch((err) => res.status(500).json({ err }));
-        });
-      });
-    })
-    .catch((err) => res.status(400).json(err));
+    .catch((err) => res.status(500).json(err));
 };
