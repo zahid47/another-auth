@@ -1,8 +1,9 @@
 //TODO add email verification
 //TODO add password reset using email
 //TODO add OAuth2.0
-//TODO implement on frontend
+//TODO implement frontend
 //TODO use async await insted of then catch
+//TODO use TS instead of JS
 
 import express from "express";
 import { config } from "dotenv";
