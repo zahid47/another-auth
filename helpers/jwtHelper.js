@@ -1,11 +1,23 @@
 import JWT from "jsonwebtoken";
 
-export const signAccessToken = (userId) => {
+export const signToken = (userId, type) => {
   return new Promise((resolve, reject) => {
+    let secret = "";
+    let expiry = "";
+
+    if (type === "ACCESS") {
+      secret = process.env.ACCESS_SECRET;
+      expiry = process.env.ACCESS_EXPIRY;
+    } else if (type === "REFRESH") {
+      secret = process.env.REFRESH_SECRET;
+      expiry = process.env.REFRESH_EXPIRY;
+    } else {
+      secret = process.env.TOKEN_SECRET;
+      expiry = process.env.TOKEN_EXPIRY;
+    }
     const payload = {};
-    const secret = process.env.ACCESS_SECRET;
     const options = {
-      expiresIn: process.env.ACCESS_EXPIRY,
+      expiresIn: expiry,
       issuer: "another-auth",
       audience: userId,
     };
@@ -18,36 +30,23 @@ export const signAccessToken = (userId) => {
   });
 };
 
-export const verifyAccessToken = (token) => {
+export const verifyToken = (token, type) => {
   return new Promise((resolve, reject) => {
-    JWT.verify(token, process.env.ACCESS_SECRET, (err, payload) => {
-      if (err) return reject(err);
-      return resolve(payload);
-    });
-  });
-};
+    let secret = "";
+    let expiry = "";
 
-export const signRefreshToken = (userId) => {
-  return new Promise((resolve, reject) => {
-    const payload = {};
-    const secret = process.env.REFRESH_SECRET;
-    const options = {
-      expiresIn: process.env.REFRESH_EXPIRY,
-      issuer: "another-auth",
-      audience: userId,
-    };
-    JWT.sign(payload, secret, options, (err, token) => {
-      if (err) {
-        return reject(err.message);
-      }
-      resolve(token);
-    });
-  });
-};
+    if (type === "ACCESS") {
+      secret = process.env.ACCESS_SECRET;
+      expiry = process.env.ACCESS_EXPIRY;
+    } else if (type === "REFRESH") {
+      secret = process.env.REFRESH_SECRET;
+      expiry = process.env.REFRESH_EXPIRY;
+    } else {
+      secret = process.env.TOKEN_SECRET;
+      expiry = process.env.TOKEN_EXPIRY;
+    }
 
-export const verifyRefreshToken = (token) => {
-  return new Promise((resolve, reject) => {
-    JWT.verify(token, process.env.REFRESH_SECRET, (err, payload) => {
+    JWT.verify(token, secret, (err, payload) => {
       if (err) return reject(err);
       return resolve(payload);
     });

@@ -1,8 +1,10 @@
-import { signAccessToken, signRefreshToken } from "../helpers/jwtHelper.js";
+import { signToken } from "../helpers/jwtHelper.js";
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import registerValidation from "../validation/registerValidation.js";
 import loginValidation from "../validation/loginValidation.js";
+// import sgMail from "@sendgrid/mail";
+//TODO move send email functionality in a separate file
 
 export const registerUser = (req, res) => {
   if (!req.body.username)
@@ -31,8 +33,34 @@ export const registerUser = (req, res) => {
       //save the new user in DB
       newUser
         .save()
-        .then((_) => {
-          return res.status(201).json({ success: true });
+        .then((user) => {
+          return res.status(200).json(user);
+          // //sign a jwt token for verification email
+          // signToken(user.id, "GENERAL")
+          //   .then((token) => {
+          //     //construct a verification email
+          //     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+          //     const confirmationUrl = `${process.env.SERVER_URL}/api/v1/verify/${token}`;
+          //     const msg = {
+          //       to: req.body.email,
+          //       from: {
+          //         name: "Another-Auth",
+          //         email: process.env.EMAIL_FROM,
+          //       },
+          //       subject: "Welcome to Another-Auth",
+          //       text: `Please verify your account using this link: ${process.env.SERVER_URL}/api/v1/verify/${token}`,
+          //       html: `<p><a href=${confirmationUrl}>Click here</a> to verify your account</p>`,
+          //     };
+          //     sgMail
+          //       .send(msg)
+          //       .then(() => {
+          //         res.status(201).json({ message: "confirmation email sent!" });
+          //       })
+          //       .catch((error) => {
+          //         console.error(error);
+          //       });
+          //   })
+          //   .catch((err) => console.log(err));
         })
         .catch((err) => {
           if (err.keyPattern.username)
@@ -63,14 +91,17 @@ export const loginUser = (req, res) => {
     .then((user) => {
       if (!user) return res.status(401).json({ email: "email not found" });
 
+      // if (!user.verified)
+      //   return res.status(401).json({ error: "please verify your email" });
+
       bcrypt
         .compare(req.body.password, user.password)
         .then((matched) => {
           if (!matched)
             return res.status(401).json({ password: "wrong password" });
-          signAccessToken(user.id)
+          signToken(user.id, "ACCESS")
             .then((accessToken) => {
-              signRefreshToken(user.id)
+              signToken(user.id, "REFRESH")
                 .then((refreshToken) => {
                   const cookieOptions = {
                     maxAge: 3.156e10, // 1y

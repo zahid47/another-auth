@@ -1,21 +1,17 @@
-import {
-  signAccessToken,
-  signRefreshToken,
-  verifyRefreshToken,
-} from "../helpers/jwtHelper.js";
+import { signToken, verifyToken } from "../helpers/jwtHelper.js";
 
 export const refreshAccessToken = (req, res) => {
   if (!req.cookies.refreshToken)
     return res.status(401).json({ refreshToken: "no refresh token provided" });
 
-  verifyRefreshToken(req.cookies.refreshToken)
+  verifyToken(req.cookies.refreshToken, "REFRESH")
     .then((payload, err) => {
       if (err)
         return res.status(400).json({ refreshToken: "bad refresh token" });
 
-      signAccessToken(payload.aud)
+      signToken(payload.aud, "ACCESS")
         .then((accessToken) => {
-          signRefreshToken(payload.aud)
+          signToken(payload.aud, "REFRESH")
             .then((refreshToken) => {
               const cookieOptions = {
                 maxAge: 3.156e10, // 1y

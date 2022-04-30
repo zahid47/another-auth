@@ -1,4 +1,4 @@
-import { verifyAccessToken } from "../helpers/jwtHelper.js";
+import { verifyToken } from "../helpers/jwtHelper.js";
 import User from "../models/User.js";
 
 const protect = (req, res, next) => {
@@ -9,7 +9,7 @@ const protect = (req, res, next) => {
 
   const token = req.headers.authorization.split(" ")[1];
 
-  verifyAccessToken(token)
+  verifyToken(token, type="ACCESS")
     .then((payload, err) => {
       if (err)
         return res.status(401).json({ error: "unauthorized, bad token" });
