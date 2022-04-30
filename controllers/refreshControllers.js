@@ -3,9 +3,8 @@ import {
   signRefreshToken,
   verifyRefreshToken,
 } from "../helpers/jwtHelper.js";
-import asyncHandler from "express-async-handler";
 
-export const refreshAccessToken = asyncHandler(async (req, res) => {
+export const refreshAccessToken = (req, res) => {
   if (!req.cookies.refreshToken)
     return res.status(401).json({ refreshToken: "no refresh token provided" });
 
@@ -34,4 +33,4 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
         .catch((err) => console.log(err));
     })
     .catch((err) => console.log(err));
-});
+};

@@ -1,10 +1,9 @@
 import { signAccessToken, signRefreshToken } from "../helpers/jwtHelper.js";
 import bcrypt from "bcryptjs";
-import asyncHandler from "express-async-handler";
 import User from "../models/User.js";
 import authValidation from "../validation/authValidation.js";
 
-export const registerUser = asyncHandler(async (req, res) => {
+export const registerUser = (req, res) => {
   if (!req.body.username)
     return res.status(400).json({ username: "no username provided" });
   if (!req.body.email)
@@ -15,14 +14,7 @@ export const registerUser = asyncHandler(async (req, res) => {
   const { error } = authValidation(req.body);
   if (error) return res.status(400).json({ error: error.details[0].message });
 
-  try {
-    const user = await User.findOne({ email: req.body.email });
-    if (user) return res.status(400).json({ email: "email already exists" });
-  } catch {
-    return res.status(500).json({ error: "internal server error" });
-  }
-
-  //everything seems ok, lets create a new user!
+  //everything seems ok, lets try to create a new user!
   const newUser = new User({
     username: req.body.username,
     email: req.body.email,
@@ -38,13 +30,25 @@ export const registerUser = asyncHandler(async (req, res) => {
       //save the new user in DB
       newUser
         .save()
-        .then((_) => res.status(201).json({ success: true }))
-        .catch((err) => res.status(500).json(err));
+        .then((_) => {
+          return res.status(201).json({ success: true });
+        })
+        .catch((err) => {
+          if (err.code === 11000 && err.keyPattern.username)
+            return res
+              .status(500)
+              .json({ username: "username already exists" });
+
+          if (err.code === 11000 && err.keyPattern.email)
+            return res.status(500).json({ email: "email already exists" });
+
+          return res.status(500).json({ error: "internal server error" });
+        });
     });
   });
-});
+};
 
-export const loginUser = asyncHandler(async (req, res) => {
+export const loginUser = (req, res) => {
   const { error } = authValidation(req.body);
   if (error)
     return res.status(400).json({ password: error.details[0].message });
@@ -82,4 +86,4 @@ export const loginUser = asyncHandler(async (req, res) => {
         .catch((err) => console.log(err));
     })
     .catch((err) => res.status(500).json(err));
-});
+};

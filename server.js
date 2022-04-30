@@ -1,8 +1,10 @@
 //TODO add email verification
 //TODO add password reset using email
+
+//TODO implement frontend
+
 //TODO use private and public key instead of plain secret
 //TODO add OAuth2.0
-//TODO implement frontend
 //TODO use async await insted of then catch
 //TODO use TS instead of JS
 

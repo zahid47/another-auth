@@ -1,7 +1,6 @@
 import User from "../models/User.js";
-import asyncHandler from "express-async-handler";
 
-export const updateUser = asyncHandler(async (req, res) => {
+export const updateUser = (req, res) => {
   // already should have currently logged in user from the protect middleware
   if (!req.user) return res.status(401).json({ error: "user not found" });
 
@@ -29,13 +28,13 @@ export const updateUser = asyncHandler(async (req, res) => {
       }
       return res.status(500).json({ error: "internal server error" });
     });
-});
+};
 
-export const deleteUser = asyncHandler(async (req, res) => {
+export const deleteUser = (req, res) => {
   // already should have currently logged in user from the protect middleware
   if (!req.user) return res.status(401).json({ error: "user not found" });
 
   User.findByIdAndDelete(req.user.id)
     .then((_) => res.status(200).json({ success: true }))
     .catch((err) => res.status(500).json(err));
-});
+};
