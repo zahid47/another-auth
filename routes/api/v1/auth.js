@@ -1,19 +1,10 @@
 import { Router } from "express";
 import {
-  testRoute,
   registerUser,
   loginUser,
 } from "../../../controllers/authController.js";
-import protect from "../../../middlewares/protect.js";
 
 const router = Router();
-
-// @route  GET api/v1/auth/test
-// @desc   tests auth route
-// @access public
-router.get("/test", (_, res) => {
-  testRoute(_, res);
-});
 
 // @route  POST api/v1/auth/register
 // @desc   register a new user

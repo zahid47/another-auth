@@ -1,5 +1,6 @@
 //TODO add email verification
 //TODO add password reset using email
+//TODO use private and public key instead of plain secret
 //TODO add OAuth2.0
 //TODO implement frontend
 //TODO use async await insted of then catch
@@ -9,10 +10,10 @@ import express from "express";
 import { config } from "dotenv";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
+import connectDB from "./helpers/connectDB.js";
 import auth from "./routes/api/v1/auth.js";
 import refresh from "./routes/api/v1/refresh.js";
 import user from "./routes/api/v1/user.js";
-import connectDB from "./helpers/connectDB.js";
 
 const app = express();
 
