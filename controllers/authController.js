@@ -1,7 +1,8 @@
 import { signAccessToken, signRefreshToken } from "../helpers/jwtHelper.js";
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
-import authValidation from "../validation/authValidation.js";
+import registerValidation from "../validation/registerValidation.js";
+import loginValidation from "../validation/loginValidation.js";
 
 export const registerUser = (req, res) => {
   if (!req.body.username)
@@ -11,7 +12,7 @@ export const registerUser = (req, res) => {
   if (!req.body.password)
     return res.status(400).json({ password: "no password provided" });
 
-  const { error } = authValidation(req.body);
+  const { error } = registerValidation(req.body);
   if (error) return res.status(400).json({ error: error.details[0].message });
 
   //everything seems ok, lets try to create a new user!
@@ -34,12 +35,12 @@ export const registerUser = (req, res) => {
           return res.status(201).json({ success: true });
         })
         .catch((err) => {
-          if (err.code === 11000 && err.keyPattern.username)
+          if (err.keyPattern.username)
             return res
               .status(500)
               .json({ username: "username already exists" });
 
-          if (err.code === 11000 && err.keyPattern.email)
+          if (err.keyPattern.email)
             return res.status(500).json({ email: "email already exists" });
 
           return res.status(500).json({ error: "internal server error" });
@@ -49,7 +50,12 @@ export const registerUser = (req, res) => {
 };
 
 export const loginUser = (req, res) => {
-  const { error } = authValidation(req.body);
+  if (!req.body.email)
+    return res.status(400).json({ email: "no email provided" });
+  if (!req.body.password)
+    return res.status(400).json({ password: "no password provided" });
+
+  const { error } = loginValidation(req.body);
   if (error)
     return res.status(400).json({ password: error.details[0].message });
 

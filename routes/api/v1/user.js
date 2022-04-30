@@ -1,8 +1,15 @@
 import { Router } from "express";
-import { updateUser, deleteUser } from "../../../controllers/userController.js";
+import { updateUser, deleteUser, showMe } from "../../../controllers/userController.js";
 import protect from "../../../middlewares/protect.js";
 
 const router = Router();
+
+// @route  GET api/v1/user/me
+// @desc   get currently logged in user
+// @access private
+router.get("/me", protect, (req, res) => {
+  showMe(req, res);
+});
 
 // @route  POST api/v1/user
 // @desc   update user
