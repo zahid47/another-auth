@@ -48,13 +48,13 @@ export const registerUser = (req, res) => {
           //         email: process.env.EMAIL_FROM,
           //       },
           //       subject: "Welcome to Another-Auth",
-          //       text: `Please verify your account using this link: ${process.env.SERVER_URL}/api/v1/verify/${token}`,
-          //       html: `<p><a href=${confirmationUrl}>Click here</a> to verify your account</p>`,
+          //       text: `Please verify your account using this link: ${process.env.SERVER_URL}/api/v1/verify/${token}.  It will expire in 1 day.`,
+          //       html: `<p><a href=${confirmationUrl}>Click here</a> to verify your account. The link will expire in 1 day.</p>`,
           //     };
           //     sgMail
           //       .send(msg)
           //       .then(() => {
-          //         res.status(201).json({ message: "confirmation email sent!" });
+          //         res.status(200).json({ message: "confirmation email sent!" });
           //       })
           //       .catch((error) => {
           //         console.error(error);
@@ -68,8 +68,9 @@ export const registerUser = (req, res) => {
               .status(500)
               .json({ username: "username already exists" });
 
-          if (err.keyPattern.email)
+          if (err.keyPattern.email) {
             return res.status(500).json({ email: "email already exists" });
+          }
 
           return res.status(500).json({ error: "internal server error" });
         });
