@@ -5,6 +5,7 @@ const connectDB = () => {
     .connect(process.env.MONGO_URI)
     .then(() => {
       console.log("mongodb connected");
+      console.log("---------------------------");
     })
     .catch((err) => {
       console.log(err);

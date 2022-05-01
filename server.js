@@ -17,7 +17,7 @@ import auth from "./routes/api/v1/auth.js";
 import refresh from "./routes/api/v1/refresh.js";
 import user from "./routes/api/v1/user.js";
 import verify from "./routes/api/v1/verify.js";
-import password from "./routes/api/v1/password.js";
+import password from "./routes/api/v1/password.js"
 
 const app = express();
 

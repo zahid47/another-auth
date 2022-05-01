@@ -1,7 +1,5 @@
 import { signToken, verifyToken } from "../helpers/jwtHelper.js";
 import User from "../models/User.js";
-import sgMail from "@sendgrid/mail";
-//TODO move send email functionality in a separate file
 
 export const sendVerificationEmail = (req, res) => {
   if (!req.body.email)

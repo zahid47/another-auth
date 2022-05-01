@@ -3,8 +3,7 @@ import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import registerValidation from "../validation/registerValidation.js";
 import loginValidation from "../validation/loginValidation.js";
-// import sgMail from "@sendgrid/mail";
-//TODO move send email functionality in a separate file
+import sendEmail from "../helpers/sendEmail.js";
 
 export const registerUser = (req, res) => {
   if (!req.body.username)
@@ -34,33 +33,8 @@ export const registerUser = (req, res) => {
       newUser
         .save()
         .then((user) => {
-          return res.status(200).json(user);
-          // //sign a jwt token for verification email
-          // signToken(user.id, "GENERAL")
-          //   .then((token) => {
-          //     //construct a verification email
-          //     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-          //     const confirmationUrl = `${process.env.SERVER_URL}/api/v1/verify/${token}`;
-          //     const msg = {
-          //       to: req.body.email,
-          //       from: {
-          //         name: "Another-Auth",
-          //         email: process.env.EMAIL_FROM,
-          //       },
-          //       subject: "Welcome to Another-Auth",
-          //       text: `Please verify your account using this link: ${confirmationUrl}.  It will expire in 1 day.`,
-          //       html: `<p><a href=${confirmationUrl}>Click here</a> to verify your account. The link will expire in 1 day.</p>`,
-          //     };
-          //     sgMail
-          //       .send(msg)
-          //       .then(() => {
-          //         res.status(200).json({ message: "confirmation email sent!" });
-          //       })
-          //       .catch((error) => {
-          //         console.error(error);
-          //       });
-          //   })
-          //   .catch((err) => console.log(err));
+          sendEmail(user.id, req.body.email, "EMAIL-VERIFICATION");
+          res.status(200).json(user);
         })
         .catch((err) => {
           if (err.keyPattern.username)

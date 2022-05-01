@@ -1,7 +1,7 @@
-import { signToken, verifyToken } from "../helpers/jwtHelper.js";
+import { verifyToken } from "../helpers/jwtHelper.js";
 import User from "../models/User.js";
-import sgMail from "@sendgrid/mail";
 import bcrypt from "bcryptjs";
+import sendEmail from "../helpers/sendEmail.js";
 
 export const forgotPass = (req, res) => {
   if (!req.body.email)
@@ -15,33 +15,8 @@ export const forgotPass = (req, res) => {
         return res.status(400).json({ email: "email not verified" });
 
       //all good, lets send the forgot pass email
-      //sign a jwt token for verification email
-      signToken(user.id, "GENERAL")
-        .then((token) => {
-          //construct a verification email
-          sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-          const confirmationUrl = `${process.env.SERVER_URL}/api/v1/password/reset/${token}`;
-          const msg = {
-            to: req.body.email,
-            from: {
-              name: "Another-Auth",
-              email: process.env.EMAIL_FROM,
-            },
-            subject: "Reset Password",
-            text: `Please reset your password using this link: ${confirmationUrl}. It will expire in 1 day.`,
-            html: `<p><a href=${confirmationUrl}>Click here</a> to reset your password. The link will expire in 1 day.</p>`,
-          };
-          return res.status(200).json(msg);
-          //   sgMail
-          //     .send(msg)
-          //     .then(() => {
-          //       res.status(200).json({ message: "password reset email sent!" });
-          //     })
-          //     .catch((error) => {
-          //       console.error(error);
-          //     });
-        })
-        .catch((err) => console.log(err));
+      sendEmail(user.id, req.body.email, "PASSWORD-RESET");
+      res.status(200).send("ok");
     })
     .catch((err) => {
       return res.status(500).json(err);
