@@ -9,7 +9,7 @@ const protect = (req, res, next) => {
 
   const token = req.headers.authorization.split(" ")[1];
 
-  verifyToken(token, type="ACCESS")
+  verifyToken(token, "ACCESS")
     .then((payload, err) => {
       if (err)
         return res.status(401).json({ error: "unauthorized, bad token" });
