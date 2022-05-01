@@ -48,7 +48,7 @@ export const registerUser = (req, res) => {
           //         email: process.env.EMAIL_FROM,
           //       },
           //       subject: "Welcome to Another-Auth",
-          //       text: `Please verify your account using this link: ${process.env.SERVER_URL}/api/v1/verify/${token}.  It will expire in 1 day.`,
+          //       text: `Please verify your account using this link: ${confirmationUrl}.  It will expire in 1 day.`,
           //       html: `<p><a href=${confirmationUrl}>Click here</a> to verify your account. The link will expire in 1 day.</p>`,
           //     };
           //     sgMail

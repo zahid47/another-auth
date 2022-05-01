@@ -1,5 +1,4 @@
-//TODO add email verification
-//TODO add password reset using email
+//TODO expire pass reset link after 1 use
 
 //TODO implement frontend
 
@@ -18,6 +17,7 @@ import auth from "./routes/api/v1/auth.js";
 import refresh from "./routes/api/v1/refresh.js";
 import user from "./routes/api/v1/user.js";
 import verify from "./routes/api/v1/verify.js";
+import password from "./routes/api/v1/password.js";
 
 const app = express();
 
@@ -36,6 +36,7 @@ app.use("/api/v1/auth", auth);
 app.use("/api/v1/refresh", refresh);
 app.use("/api/v1/user", user);
 app.use("/api/v1/verify", verify);
+app.use("/api/v1/password", password);
 
 const port = process.env.PORT || 8000;
 
