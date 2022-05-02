@@ -1,3 +1,5 @@
+//TODO refactor server code and http status codes
+
 //TODO expire pass reset link after 1 use
 
 //TODO implement frontend
@@ -26,7 +28,7 @@ const app = express();
 config();
 connectDB();
 
-app.use(cors({ origin: process.env.CLIENT_URL }));
+app.use(cors({ credentials: true, origin: process.env.CLIENT_URL }));
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));

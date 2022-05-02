@@ -3,10 +3,10 @@ import { refreshAccessToken } from "../../../controllers/refreshControllers.js";
 
 const router = Router();
 
-// @route  POST api/v1/refresh
+// @route  GET api/v1/refresh
 // @desc   sign new accessToken using a valid refreshToken
 // @access public
-router.post("/", (req, res) => {
+router.get("/", (req, res) => {
   refreshAccessToken(req, res);
 });
 
