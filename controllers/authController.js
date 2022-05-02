@@ -79,15 +79,13 @@ export const loginUser = (req, res) => {
               signToken(user.id, "REFRESH")
                 .then((refreshToken) => {
                   const cookieOptions = {
-                    maxAge: 3.156e10, // 1y
+                    maxAge: 24 * 60 * 60 * 1000, // 1d
                     httpOnly: true,
-                    secure: process.env.NODE_ENV !== "development",
-                    SameSite: "strict",
+                    secure: true,
+                    sameSite: "None",
                   };
-                  res
-                    .status(200)
-                    .cookie("refreshToken", refreshToken, cookieOptions)
-                    .json({ accessToken });
+                  res.cookie("refreshToken", refreshToken, cookieOptions);
+                  res.json({ accessToken });
                 })
                 .catch((err) => {
                   console.log(err);
