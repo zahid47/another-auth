@@ -33,7 +33,7 @@ export const registerUser = (req, res) => {
       newUser
         .save()
         .then((user) => {
-          sendEmail(user.id, req.body.email, "EMAIL-VERIFICATION");
+          // sendEmail(user.id, req.body.email, "EMAIL-VERIFICATION");
           res.status(200).json(user);
         })
         .catch((err) => {

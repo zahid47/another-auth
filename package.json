@@ -5,7 +5,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon server.js"
+    "backend": "nodemon server.js",
+    "frontend": "cd client && npm run dev",
+    "dev": "concurrently \"yarn frontend\" \"yarn backend\""
   },
   "repository": {
     "type": "git",
@@ -19,6 +21,7 @@
   },
   "homepage": "https://github.com/zahid47/another-auth#readme",
   "devDependencies": {
+    "concurrently": "^7.1.0",
     "nodemon": "^2.0.15"
   },
   "dependencies": {

@@ -15,7 +15,7 @@ export const forgotPass = (req, res) => {
         return res.status(400).json({ email: "email not verified" });
 
       //all good, lets send the forgot pass email
-      sendEmail(user.id, req.body.email, "PASSWORD-RESET");
+      // sendEmail(user.id, req.body.email, "PASSWORD-RESET");
       res.status(200).send("ok");
     })
     .catch((err) => {
