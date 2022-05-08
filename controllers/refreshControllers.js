@@ -1,10 +1,13 @@
 import { signToken, verifyToken } from "../helpers/jwtHelper.js";
 
 export const refreshAccessToken = (req, res) => {
-  if (!req.cookies.refreshToken)
+  // const refToken = req.cookies.refreshToken;
+  const refToken = req.query.refreshToken; //temporary fix //TODO fix it
+
+  if (!refToken)
     return res.status(401).json({ refreshToken: "no refresh token provided" });
 
-  verifyToken(req.cookies.refreshToken, "REFRESH")
+  verifyToken(refToken, "REFRESH")
     .then((payload, err) => {
       if (err)
         return res.status(400).json({ refreshToken: "bad refresh token" });

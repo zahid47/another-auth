@@ -78,14 +78,15 @@ export const loginUser = (req, res) => {
             .then((accessToken) => {
               signToken(user.id, "REFRESH")
                 .then((refreshToken) => {
-                  const cookieOptions = {
-                    maxAge: 24 * 60 * 60 * 1000, // 1d
-                    httpOnly: true,
-                    secure: true,
-                    sameSite: "None",
-                  };
-                  res.cookie("refreshToken", refreshToken, cookieOptions);
-                  res.json({ accessToken });
+                  // const cookieOptions = {
+                  //   maxAge: 24 * 60 * 60 * 1000, // 1d
+                  //   httpOnly: true,
+                  //   secure: true,
+                  //   sameSite: "None",
+                  // };
+                  // res.cookie("refreshToken", refreshToken, cookieOptions);
+                  // res.json({ accessToken });
+                  res.json({ accessToken, refreshToken }); //temp fix //TODO fix it
                 })
                 .catch((err) => {
                   console.log(err);
