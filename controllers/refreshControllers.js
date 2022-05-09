@@ -16,15 +16,15 @@ export const refreshAccessToken = (req, res) => {
         .then((accessToken) => {
           signToken(payload.aud, "REFRESH")
             .then((refreshToken) => {
-              const cookieOptions = {
-                maxAge: 24 * 60 * 60 * 1000, // 1d
-                httpOnly: true,
-                secure: true,
-                sameSite: "None",
-              };
+              // const cookieOptions = {
+              //   maxAge: 24 * 60 * 60 * 1000, // 1d
+              //   httpOnly: true,
+              //   secure: true,
+              //   sameSite: "None",
+              // };
               res
                 .status(200)
-                .cookie("refreshToken", refreshToken, cookieOptions)
+                // .cookie("refreshToken", refreshToken, cookieOptions)
                 .json({ accessToken });
             })
             .catch((err) => console.log(err));

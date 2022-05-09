@@ -86,7 +86,7 @@ export const loginUser = (req, res) => {
                   // };
                   // res.cookie("refreshToken", refreshToken, cookieOptions);
                   // res.json({ accessToken });
-                  res.json({ accessToken, refreshToken }); //temp fix //TODO fix it
+                  res.json({ user, accessToken, refreshToken }); //temp fix //TODO fix it
                 })
                 .catch((err) => {
                   console.log(err);

@@ -4,7 +4,9 @@ import isEmpty from "../helpers/isEmpty.js";
 export const showMe = (req, res) => {
   // already should have currently logged in user from the protect middleware
   if (!req.user) return res.status(401).json({ error: "user not found" });
-  return res.status(200).json(req.user);
+  //TODO change this back
+  res.status(200).send(new Date().toString());
+  // return res.status(200).json(req.user);
 };
 
 export const updateUser = (req, res) => {
